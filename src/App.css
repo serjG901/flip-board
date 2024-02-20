@@ -1,0 +1,45 @@
+#root {
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+}
+
+.board {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 90svh;
+}
+
+.score {
+    display: flex;
+    flex: 1fr 1fr;
+    width: 100%;
+    height: 70%;
+}
+
+.score > div {
+    width: 50%;
+    font-size: 40vh;
+    border: 2px solid var(--color-border);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.party {
+    display: flex;
+    flex: 1fr 1fr;
+    width: 50%;
+    height: 30%;
+}
+
+.party > div {
+    width: 50%;
+    font-size: 10vh;
+    border: 1px solid var(--color-border);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
