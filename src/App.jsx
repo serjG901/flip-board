@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
+window.addEventListener("resize", () => {});
+
 let startTouch = 0;
 let endTouch = 0;
+
+const touchSensetive = 0.6;
 
 function App() {
     const [score1, setScore1] = useState(0);
@@ -14,10 +18,6 @@ function App() {
     const [heightParty, setHeightParty] = useState(0);
 
     useEffect(() => {
-        console.log(
-            document.getElementsByClassName("score")[0].getBoundingClientRect()
-                .height
-        );
         setHeightScore(
             document.getElementsByClassName("score")[0].getBoundingClientRect()
                 .height
@@ -28,6 +28,26 @@ function App() {
         );
     }, []);
 
+    useEffect(() => {
+        const resize = () => {
+            setHeightScore(
+                document
+                    .getElementsByClassName("score")[0]
+                    .getBoundingClientRect().height
+            );
+            setHeightParty(
+                document
+                    .getElementsByClassName("party")[0]
+                    .getBoundingClientRect().height
+            );
+        };
+        window.addEventListener("resize", resize);
+
+        return () => {
+            window.removeEventListener("resize", resize);
+        };
+    }, []);
+
     const handleChangeScoreSwipe = (e, player, type) => {
         if (type === "start") {
             startTouch = e.changedTouches[0].clientY;
@@ -36,14 +56,14 @@ function App() {
             endTouch = e.changedTouches[0].clientY;
         }
 
-        if (startTouch - endTouch > heightScore * 0.8) {
+        if (startTouch - endTouch > heightScore * touchSensetive) {
             if (player === 1) {
                 setScore1((state) => state + 1);
             } else {
                 setScore2((state) => state + 1);
             }
         }
-        if (endTouch - startTouch > heightScore * 0.8) {
+        if (endTouch - startTouch > heightScore * touchSensetive) {
             if (player === 1) {
                 setScore1((state) => state - 1);
             } else {
@@ -60,19 +80,28 @@ function App() {
             endTouch = e.changedTouches[0].clientY;
         }
 
-        if (startTouch - endTouch > heightParty * 0.8) {
+        if (startTouch - endTouch > heightParty * touchSensetive) {
             if (player === 1) {
                 setParty1((state) => state + 1);
             } else {
                 setParty2((state) => state + 1);
             }
         }
-        if (endTouch - startTouch > heightParty * 0.8) {
+        if (endTouch - startTouch > heightParty * touchSensetive) {
             if (player === 1) {
                 setParty1((state) => state - 1);
             } else {
                 setParty2((state) => state - 1);
             }
+        }
+    };
+
+    const handleReset = () => {
+        if (window.confirm("Reset all score?")) {
+            setScore1(0);
+            setScore2(0);
+            setParty1(0);
+            setParty2(0);
         }
     };
 
@@ -112,6 +141,7 @@ function App() {
                     <div>{party2}</div>
                 </div>
             </div>
+            <button className="reset" onClick={handleReset}>RESET</button>
         </div>
     );
 }
